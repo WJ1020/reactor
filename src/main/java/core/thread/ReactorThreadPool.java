@@ -38,6 +38,21 @@ public class ReactorThreadPool extends ThreadPoolExecutor {
         numTasks.incrementAndGet();
         totalTime.addAndGet(taskTime);
         logger.info(" Thread %s :end %s, time=%dns",t,r,taskTime);
+        if (t==null&& r instanceof  Future<?>){
+            try {
+                ((Future<?>)r).get();
+            }catch (CancellationException ce){
+                t=ce;
+            }catch (ExecutionException ee){
+                t=ee.getCause();
+            }catch (InterruptedException ie){
+                Thread.currentThread().interrupt();
+            }
+        }
+        if (t!=null){
+            logger.error("Thread:{},Exception:{}",r.getClass().getName(),t.getMessage());
+        }
+
     }
 
     @Override
