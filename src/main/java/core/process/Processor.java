@@ -1,5 +1,6 @@
 package core.process;
 
+import core.thread.ReactorThreadPool;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -10,12 +11,11 @@ import java.nio.channels.Selector;
 import java.nio.channels.SocketChannel;
 import java.nio.channels.spi.SelectorProvider;
 import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 
 public class Processor {
     private static final Logger logger= LoggerFactory.getLogger(Processor.class);
     private static final ExecutorService service=
-            Executors.newFixedThreadPool(2*Runtime.getRuntime().availableProcessors());
+            new ReactorThreadPool();
     private final Selector selector;
 
     private volatile boolean running=true;
